@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,visualstudiocode,python,django
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,visualstudiocode,python,django
 
+# Maria DB
+mariadb/data
+
 ### Django ###
 *.log
 *.pot
@@ -136,7 +139,7 @@ celerybeat.pid
 .venv
 # env/
 venv/
-ENV/
+# ENV/
 env.bak/
 venv.bak/
 

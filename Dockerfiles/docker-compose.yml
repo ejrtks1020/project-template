@@ -1,0 +1,41 @@
+services:
+  database:
+    image: mariadb:11.1
+    container_name: database
+    ports:
+      - 3305:3306
+    volumes:
+      - ../mariadb/conf.d:/etc/mysql/mariadb.conf.d # mariadb 설정 파일
+      - ../mariadb/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ../mariadb/data:/var/lib/mysql # data dir
+      - ../mariadb/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - localnet
+    restart: always
+
+  # frontend:
+  #   container_name: frontend
+
+  backend:
+    image: backend
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile-api
+    container_name: backend
+    environment:
+      - PROFILE=local
+      - TZ=Asia/Seoul
+    ports:
+      - 7070:8080
+    networks:
+      - localnet
+    depends_on:
+      - database
+
+networks:
+  localnet:
+    name: localnet
+    driver: bridge
