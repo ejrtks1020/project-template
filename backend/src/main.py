@@ -33,7 +33,7 @@ app.add_middleware(
 
 
 @app.exception_handler(CustomException)
-async def mlops_exception_handler(request: Request, exc: CustomException):
+async def custom_exception_handler(request: Request, exc: CustomException):
     # print(exc)
     return JSONResponse(
         status_code=200,
