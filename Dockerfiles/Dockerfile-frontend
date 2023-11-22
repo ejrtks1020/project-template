@@ -1,0 +1,22 @@
+FROM node:18.16.0-slim as builder
+
+COPY frontend/ /app
+WORKDIR /app
+RUN yarn install
+RUN yarn build:prod
+
+
+FROM node:18.16.0-slim as runtime
+
+ENV DEBIAN_FRONTEND=nonintercative
+RUN apt-get update
+RUN apt-get install -y --allow-unauthenticated vim nginx supervisor
+
+COPY frontend/deployment/nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY frontend/deployment/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+COPY --from=builder /app/dist/ /app/dist
+
+EXPOSE 80
+
+ENTRYPOINT ["supervisord", "-n"]
